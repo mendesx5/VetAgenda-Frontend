@@ -448,10 +448,18 @@ async function loadTutores() {
 
 async function criarTutor() {
   const name = document.getElementById('tutor-name').value.trim();
-  if (!name) { toast('Nome é obrigatório.', 'error'); return; }
+  const cpf = document.getElementById('tutor-cpf').value.trim(); // Captura o CPF
+
+  // Como o backend exige o CPF, o front também deve barrar se estiver em branco
+  if (!name || !cpf) { 
+    toast('Nome e CPF são obrigatórios.', 'error'); 
+    return; 
+  }
+
   try {
     await api('POST', '/tutores', {
       name,
+      cpf, // Envia o CPF para o backend
       email: document.getElementById('tutor-email').value || null,
       telefone: document.getElementById('tutor-telefone').value || null
     });
