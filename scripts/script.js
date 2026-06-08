@@ -375,12 +375,23 @@ async function criarAnimal() {
   const name = document.getElementById('animal-name').value.trim();
   const tutorId = document.getElementById('animal-tutorId').value;
   if (!name || !tutorId) { toast('Nome e tutor são obrigatórios.', 'error'); return; }
+
+  // Captura o valor original do HTML (AAAA-MM-DD)
+  const dataNascimentoRaw = document.getElementById('animal-dataNascimento').value;
+  let dataNascimentoFormatada = null;
+
+  // Converte para o padrão BR (DD/MM/AAAA) exigido pelo validador do Java
+  if (dataNascimentoRaw) {
+    const partes = dataNascimentoRaw.split('-');
+    dataNascimentoFormatada = partes[2] + '/' + partes[1] + '/' + partes[0];
+  }
+
   try {
     await api('POST', '/animais', {
       name,
       especie: document.getElementById('animal-especie').value || null,
       raca: document.getElementById('animal-raca').value || null,
-      dataNascimento: document.getElementById('animal-dataNascimento').value || null,
+      dataNascimento: dataNascimentoFormatada, // Envia a data corrigida em formato texto
       peso: document.getElementById('animal-peso').value ? Number(document.getElementById('animal-peso').value) : null,
       tutorId: Number(tutorId)
     });
