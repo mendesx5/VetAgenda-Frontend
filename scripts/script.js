@@ -170,12 +170,16 @@ async function loadDashboard() {
         const d = new Date(a.dataHora);
         const timeStr = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         const dateStr = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-        const animalName = a.animal?.name || '—';
-        const vetName = a.veterinario?.name || '—';
+        
+        // ATENÇÃO: Altere o termo após o "a." para o nome exato que veio no seu Response da API
+        const animalName = a.nomeAnimal || '—'; 
+        const vetName = a.nomeVeterinario || '—';
+        const especie = a.animalEspecie || ''; 
+
         return `<div class="timeline-item">
           <div class="timeline-dot ${(a.status||'').toLowerCase()}"></div>
           <div class="timeline-content">
-            <div class="timeline-title">${animalEmoji(a.animal?.especie)} ${animalName} — ${vetName}</div>
+            <div class="timeline-title">${animalEmoji(especie)} ${animalName} — ${vetName}</div>
             <div class="timeline-meta">${dateStr} às ${timeStr}</div>
           </div>
           ${statusBadge(a.status)}
@@ -219,10 +223,10 @@ function renderAgendamentos() {
       <td>
         <div class="animal-chip">
           <div class="animal-avatar">${animalEmoji(a.animal?.especie)}</div>
-          ${a.animal?.name || '—'}
+          ${a.nomeAnimal || '—'}
         </div>
       </td>
-      <td>${a.veterinario?.name || '—'}</td>
+      <td>${a.nomeVeterinario || '—'}</td>
       <td style="font-size:13px;color:var(--stone-500)">${formatDate(a.dataHora)}</td>
       <td>${statusBadge(a.status)}</td>
       <td>
