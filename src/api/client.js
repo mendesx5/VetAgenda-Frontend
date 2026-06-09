@@ -1,30 +1,27 @@
 const BASE = 'http://localhost:8080';
 
 async function request(method, path, body) {
-  // 🌟 1. Recupera o token que guardamos no localStorage durante o login
   const token = localStorage.getItem('vetagenda_token');
 
   // Inicializa os cabeçalhos padrão
   const headers = { 'Content-Type': 'application/json' };
 
-  // 🌟 2. Se o utilizador estiver logado (com token), anexa o carimbo "Bearer <TOKEN>"
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
   const opts = {
     method,
-    headers, // Passa os cabeçalhos atualizados aqui
+    headers,
   };
   if (body) opts.body = JSON.stringify(body);
 
   const res = await fetch(BASE + path, opts);
 
-  // 🌟 3. Se o Java disser que o token é inválido ou expirou (Erro 401 ou 403)
   if (res.status === 401 || res.status === 403) {
     localStorage.removeItem('vetagenda_token');
     localStorage.removeItem('vetagenda_role');
-    window.location.href = '/login'; // Joga o utilizador de volta para a tela de login
+    window.location.href = '/login';
     throw new Error('Sessão expirada. Faça login novamente.');
   }
 
