@@ -11,6 +11,9 @@ import styles from './Veterinarios.module.css';
 
 export default function Veterinarios() {
   const toast = useToastContext();
+  const userRole = localStorage.getItem('vetagenda_role');
+  const normalizedRole = userRole ? userRole.toUpperCase() : '';
+
   const [vets, setVets] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +41,6 @@ export default function Veterinarios() {
     return (e) => setForm({ ...form, [key]: e.target.value });
   }
 
-  // Calcula consultas ativas por nome (mesmo critério do script.js corrigido)
   function consultasAtivas(vetName) {
     return agendamentos.filter(
       (a) =>
@@ -85,9 +87,12 @@ export default function Veterinarios() {
           <h1 className={pageStyles.heading}>Veterinários</h1>
           <p className={pageStyles.desc}>Profissionais registrados na clínica</p>
         </div>
-        <Button variant="primary" onClick={() => setModalOpen(true)}>
-          <IconPlus /> Novo Veterinário
-        </Button>
+        
+        {normalizedRole === 'ADMIN' && (
+          <Button variant="primary" onClick={() => setModalOpen(true)}>
+            <IconPlus /> Novo Veterinário
+          </Button>
+        )}
       </div>
 
       <div className={pageStyles.card}>
@@ -100,14 +105,14 @@ export default function Veterinarios() {
                 <th>CRMV</th>
                 <th>Especialidade</th>
                 <th>Consultas ativas</th>
-                <th>Ações</th>
+                {normalizedRole === 'ADMIN' && <th>Ações</th>}
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className={pageStyles.emptyCell}>Carregando...</td></tr>
+                <tr><td colSpan={normalizedRole === 'ADMIN' ? 6 : 5} className={pageStyles.emptyCell}>Carregando...</td></tr>
               ) : vets.length === 0 ? (
-                <tr><td colSpan={6} className={pageStyles.emptyCell}>Nenhum veterinário cadastrado.</td></tr>
+                <tr><td colSpan={normalizedRole === 'ADMIN' ? 6 : 5} className={pageStyles.emptyCell}>Nenhum veterinário cadastrado.</td></tr>
               ) : (
                 vets.map((v) => (
                   <tr key={v.id}>
@@ -127,11 +132,15 @@ export default function Veterinarios() {
                         {consultasAtivas(v.name)} consultas
                       </span>
                     </td>
-                    <td>
-                      <Button variant="danger" size="icon" onClick={() => handleDeletar(v.id)}>
-                        <IconTrash />
-                      </Button>
-                    </td>
+                    
+                    {/* 🔒 TRAVA DE REMOÇÃO: O botão de excluir sumirá para a receção */}
+                    {normalizedRole === 'ADMIN' && (
+                      <td>
+                        <Button variant="danger" size="icon" onClick={() => handleDeletar(v.id)}>
+                          <IconTrash />
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}
