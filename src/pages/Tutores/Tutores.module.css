@@ -1,0 +1,25 @@
+.tutorChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--green-50);
+  border: 1.5px solid var(--green-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-700);
+  flex-shrink: 0;
+}
+
+.mutedCell {
+  font-size: 13px;
+  color: var(--stone-500);
+}

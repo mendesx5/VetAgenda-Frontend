@@ -1,0 +1,85 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal {
+  background: white;
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 540px;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.header {
+  padding: 24px 24px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--stone-900);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--stone-400);
+  margin-top: 3px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  color: var(--stone-400);
+  margin-top: -4px;
+  margin-right: -4px;
+  transition: all 0.15s;
+  display: flex;
+}
+
+.closeBtn:hover {
+  background: var(--stone-100);
+  color: var(--stone-700);
+}
+
+.closeBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.body {
+  padding: 20px 24px;
+}
+
+.footer {
+  padding: 16px 24px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--stone-100);
+}
+
+@media (max-width: 600px) {
+  .modal { border-radius: var(--radius-lg); }
+}

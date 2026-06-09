@@ -1,0 +1,34 @@
+.vetChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--teal-50);
+  border: 1.5px solid var(--teal-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal-600);
+  flex-shrink: 0;
+}
+
+.crmv {
+  font-size: 12px;
+  background: var(--stone-100);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--stone-700);
+}
+
+.consultasCount {
+  font-size: 13px;
+  color: var(--stone-500);
+}

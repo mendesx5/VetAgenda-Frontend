@@ -1,0 +1,29 @@
+.root {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--stone-400);
+}
+
+.icon {
+  margin: 0 auto 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.icon svg {
+  width: 44px;
+  height: 44px;
+  color: var(--stone-300);
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--stone-500);
+}
+
+.desc {
+  font-size: 13px;
+  margin-top: 4px;
+  color: var(--stone-400);
+}
