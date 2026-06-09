@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/Login';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import Login from './pages/Login/Login';
 import Dashboard from './pages/Dashboard';
 import Veterinarios from './pages/Veterinarios';
 
@@ -31,3 +31,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
+export default App;
