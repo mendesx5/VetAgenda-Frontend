@@ -1,11 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import styles from './Sidebar.module.css';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext'; // Garante o acesso ao login/logout
 
 const NAV = [
   {
     label: 'Principal',
     items: [
-      { to: '/', label: 'Dashboard', icon: <IconDashboard /> },
+      // 🌟 Atualizado para '/dashboard' para casar com a correção inteligente que fez no App.jsx
+      { to: '/dashboard', label: 'Dashboard', icon: <IconDashboard /> }, 
       { to: '/agendamentos', label: 'Agendamentos', icon: <IconCalendar /> },
     ],
   },
@@ -19,11 +22,18 @@ const NAV = [
   },
 ];
 
+// 🌟 APENAS UMA FUNÇÃO SIDEBAR NO ARQUIVO INTEIRO
 export default function Sidebar({ open, onClose }) {
+  // 🌟 Injeta a função de logout corretamente dentro do componente
+  const { logout } = useContext(AuthContext); 
+
   return (
     <>
+      {/* Fundo escuro para cliques no mobile */}
       <div className={`${styles.overlay} ${open ? styles.overlayOpen : ''}`} onClick={onClose} />
+      
       <aside className={`${styles.sidebar} ${open ? styles.open : ''}`}>
+        {/* Logo do Sistema */}
         <div className={styles.logo}>
           <div className={styles.logoIcon}>
             <PawSvg />
@@ -34,6 +44,7 @@ export default function Sidebar({ open, onClose }) {
           </div>
         </div>
 
+        {/* Links de Navegação do Menu */}
         <nav className={styles.nav}>
           {NAV.map((section) => (
             <div key={section.label}>
@@ -42,7 +53,6 @@ export default function Sidebar({ open, onClose }) {
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  end={item.to === '/'}
                   className={({ isActive }) =>
                     `${styles.navItem} ${isActive ? styles.active : ''}`
                   }
@@ -56,6 +66,12 @@ export default function Sidebar({ open, onClose }) {
           ))}
         </nav>
 
+        {/* 🚪 Botão de Logout adicionado perfeitamente acima do rodapé */}
+        <button onClick={logout} className={styles.logoutButton}>
+          🚪 Sair do Sistema
+        </button>
+
+        {/* Rodapé com Status da API */}
         <div className={styles.footer}>
           <div className={styles.apiBadge}>
             <div className={styles.apiDot} />
@@ -70,7 +86,7 @@ export default function Sidebar({ open, onClose }) {
   );
 }
 
-/* ── Inline SVG icons ── */
+/* ── Inline SVG icons (Mantidos exatamente como os originais) ── */
 function IconDashboard() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
