@@ -1,15 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext'; // Ajustado os níveis dos pontinhos
 import styles from './Login.module.css';
 
 const Login = () => {
-    // Controla se a tela está em modo de Login ou modo de Registro
     const [isRegister, setIsRegister] = useState(false);
-
     const [loginInput, setLoginInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
-    const [roleInput, setRoleInput] = useState('USER'); // Padrão: Funcionário comum
+    const [roleInput, setRoleInput] = useState('USER');
     
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -18,13 +16,10 @@ const Login = () => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    // Limpa os campos e mensagens ao alternar de tela
     const toggleMode = () => {
         setIsRegister(!isRegister);
         setError('');
         setSuccessMessage('');
-        setLoginInput('');
-        setPasswordInput('');
     };
 
     const handleSubmit = async (e) => {
@@ -40,7 +35,6 @@ const Login = () => {
         }
 
         if (isRegister) {
-            // LÓGICA DE REGISTRO (Chama o seu endpoint /auth/register do Java)
             try {
                 const response = await fetch('http://localhost:8080/auth/register', {
                     method: 'POST',
@@ -49,9 +43,9 @@ const Login = () => {
                 });
 
                 if (response.ok) {
-                    setSuccessMessage('Usuário cadastrado com sucesso! Faça o login.');
-                    setIsRegister(false); // Volta para a tela de login
-                    setPasswordInput(''); // Limpa a senha por segurança
+                    setSuccessMessage('Conta cadastrada com sucesso! Faça o login.');
+                    setIsRegister(false);
+                    setPasswordInput('');
                 } else {
                     const textError = await response.text();
                     setError(textError || 'Erro ao cadastrar usuário.');
@@ -60,7 +54,6 @@ const Login = () => {
                 setError('Não foi possível conectar ao servidor.');
             }
         } else {
-            // LÓGICA DE LOGIN COMUM
             const result = await login(loginInput, passwordInput);
             if (result.success) {
                 navigate('/dashboard');
@@ -68,13 +61,13 @@ const Login = () => {
                 setError(result.message || 'Erro ao realizar login. Tente novamente.');
             }
         }
-
         setLoading(false);
     };
 
     return (
         <div className={styles.container}>
-            <div className={styles.card}>
+            {/* 🌟 Injeta a classe condicional .cardRegister de forma dinâmica para ativar a animação */}
+            <div className={`${styles.card} ${isRegister ? styles.cardRegister : ''}`}>
                 <div className={styles.header}>
                     <div className={styles.logo}>🐾</div>
                     <h2 className={styles.title}>VetAgenda</h2>
@@ -84,14 +77,14 @@ const Login = () => {
                 </div>
 
                 {error && <div className={styles.errorBadge}>{error}</div>}
-                {successMessage && <div style={{backgroundColor: '#d1fae5', color: '#065f46'}} className={styles.errorBadge}>{successMessage}</div>}
+                {successMessage && <div className={styles.successBadge}>{successMessage}</div>}
 
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Usuário / E-mail</label>
                         <input
                             type="text"
-                            placeholder="Ex: funcionario@vetagenda.com"
+                            placeholder="Ex: admin@vetagenda.com"
                             value={loginInput}
                             onChange={(e) => setLoginInput(e.target.value)}
                             className={styles.input}
@@ -111,21 +104,21 @@ const Login = () => {
                         />
                     </div>
 
-                    {/* Campo extra que SÓ APARECE se estiver no modo de Registro */}
-                    {isRegister && (
+                    {/* 🌟 O contêiner da animação: Ele sempre existe na tela, o CSS se encarrega de abrir/fechar */}
+                    <div className={styles.extraFields}>
                         <div className={styles.inputGroup}>
                             <label className={styles.label}>Nível de Acesso</label>
                             <select 
                                 value={roleInput} 
                                 onChange={(e) => setRoleInput(e.target.value)}
                                 className={styles.input}
-                                style={{backgroundColor: 'white', height: '42px'}}
+                                style={{ backgroundColor: 'white', height: '42px' }}
                             >
-                                <option value="USER">USER (Veterinário/Funcionário)</option>
+                                <option value="USER">USER (Funcionário/Veterinário)</option>
                                 <option value="ADMIN">ADMIN (Dono/Gestor)</option>
                             </select>
                         </div>
-                    )}
+                    </div>
 
                     <button 
                         type="submit" 
@@ -136,15 +129,11 @@ const Login = () => {
                     </button>
                 </form>
 
-                {/* Link amigável para alternar entre as duas telas */}
-                <div style={{marginTop: '20px', textAlign: 'center', fontSize: '14px'}}>
-                    <span style={{color: '#6b7280'}}>
+                <div className={styles.toggleContainer}>
+                    <span className={styles.toggleText}>
                         {isRegister ? 'Já tem uma conta? ' : 'Precisa de um novo acesso? '}
                     </span>
-                    <button 
-                        onClick={toggleMode}
-                        style={{background: 'none', border: 'none', color: '#10b981', fontWeight: 'bold', cursor: 'pointer', padding: 0, textDecoration: 'underline'}}
-                    >
+                    <button type="button" onClick={toggleMode} className={styles.toggleButton}>
                         {isRegister ? 'Fazer Login' : 'Criar Conta (Dev)'}
                     </button>
                 </div>
