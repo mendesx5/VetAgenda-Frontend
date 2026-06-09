@@ -208,8 +208,8 @@ function renderAgendamentos() {
   if (agendamentosSearch) {
     const q = agendamentosSearch.toLowerCase();
     data = data.filter(a =>
-      (a.animal?.name || '').toLowerCase().includes(q) ||
-      (a.veterinario?.name || '').toLowerCase().includes(q) ||
+      (a.nomeAnimal || '').toLowerCase().includes(q) ||
+      (a.nomeVeterinario || '').toLowerCase().includes(q) ||
       String(a.id).includes(q)
     );
   }
@@ -222,18 +222,17 @@ function renderAgendamentos() {
       <td><span style="color:var(--stone-400);font-size:13px">#${a.id}</span></td>
       <td>
         <div class="animal-chip">
-          <div class="animal-avatar">${animalEmoji(a.animal?.especie)}</div>
-          ${a.nomeAnimal || '—'}
-        </div>
+          <div class="animal-avatar">🐾</div>
+          ${a.nomeAnimal || '—'} </div>
       </td>
-      <td>${a.nomeVeterinario || '—'}</td>
-      <td style="font-size:13px;color:var(--stone-500)">${formatDate(a.dataHora)}</td>
+      <td>${a.nomeVeterinario || '—'}</td> <td style="font-size:13px;color:var(--stone-500)">${formatDate(a.dataHora)}</td>
       <td>${statusBadge(a.status)}</td>
       <td>
         <div class="action-group">
           ${a.status === 'AGENDADO' ? `<button class="btn btn-ghost btn-sm" onclick="mudarStatus(${a.id},'confirmar')" title="Confirmar">✓ Confirmar</button>` : ''}
           ${a.status === 'CONFIRMADO' ? `<button class="btn btn-ghost btn-sm" onclick="mudarStatus(${a.id},'concluir')" title="Concluir">✓ Concluir</button>` : ''}
           ${(a.status === 'AGENDADO' || a.status === 'CONFIRMADO') ? `<button class="btn btn-danger btn-sm" onclick="abrirCancelar(${a.id})">Cancelar</button>` : ''}
+          
           <button class="btn btn-danger btn-sm" onclick="deletarAgendamento(${a.id})" title="Excluir" style="padding:5px 8px">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
           </button>
@@ -310,7 +309,6 @@ async function criarAgendamento() {
   const animalId = document.getElementById('ag-animalId').value;
   const veterinarioId = document.getElementById('ag-veterinarioId').value;
   const dataHora = document.getElementById('ag-dataHora').value;
-  const status = document.getElementById('ag-status').value;
 
   if (!animalId || !veterinarioId || !dataHora) {
     toast('Preencha todos os campos obrigatórios.', 'error');
@@ -322,7 +320,7 @@ async function criarAgendamento() {
       animalId: Number(animalId),
       veterinarioId: Number(veterinarioId),
       dataHora: dataHora + ':00',
-      status
+      status: 'AGENDADO'
     });
     toast('Agendamento criado com sucesso!');
     closeModal('novoAgendamento');
