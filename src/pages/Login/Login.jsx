@@ -7,7 +7,7 @@ const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
     const [loginInput, setLoginInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
-    const [roleInput, setRoleInput] = useState('USER');
+    const [roleInput, setRoleInput] = useState('RECEPCIONISTA');
     
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -66,7 +66,6 @@ const Login = () => {
 
     return (
         <div className={styles.container}>
-            {/* 🌟 Injeta a classe condicional .cardRegister de forma dinâmica para ativar a animação */}
             <div className={`${styles.card} ${isRegister ? styles.cardRegister : ''}`}>
                 <div className={styles.header}>
                     <div className={styles.logo}>🐾</div>
@@ -104,7 +103,6 @@ const Login = () => {
                         />
                     </div>
 
-                    {/* 🌟 O contêiner da animação: Ele sempre existe na tela, o CSS se encarrega de abrir/fechar */}
                     <div className={styles.extraFields}>
                         <div className={styles.inputGroup}>
                             <label className={styles.label}>Nível de Acesso</label>
@@ -114,7 +112,8 @@ const Login = () => {
                                 className={styles.input}
                                 style={{ backgroundColor: 'white', height: '42px' }}
                             >
-                                <option value="USER">USER (Funcionário/Veterinário)</option>
+                                <option value="RECEPCIONISTA">RECEPCIONISTA (Atendimento/Agenda)</option>
+                                <option value="VETERINARIO">VETERINÁRIO (Médico Veterinário)</option>
                                 <option value="ADMIN">ADMIN (Dono/Gestor)</option>
                             </select>
                         </div>
