@@ -492,6 +492,13 @@ async function loadVets() {
     }
     tbody.innerHTML = allVets.map(v => {
       const initials = v.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+      
+      // CÁLCULO DINÂMICO DOS AGENDAMENTOS ATIVOS (AGENDADO OU CONFIRMADO)
+      const consultasAtivas = allAgendamentos.filter(a => 
+        a.nomeVeterinario === v.name && 
+        (a.status === 'AGENDADO' || a.status === 'CONFIRMADO')
+      ).length;
+
       return `
         <tr>
           <td><span style="color:var(--stone-400);font-size:13px">#${v.id}</span></td>
@@ -504,7 +511,7 @@ async function loadVets() {
           <td><code style="font-size:12px;background:var(--stone-100);padding:2px 8px;border-radius:4px">${v.crmv || '—'}</code></td>
           <td>${espBadge(v.especialidade)}</td>
           <td>
-            <span style="font-size:13px;color:var(--stone-500)">${(v.agendamentos || []).length} consultas</span>
+            <span style="font-size:13px;color:var(--stone-500)">${consultasAtivas} consultas</span>
           </td>
           <td>
             <button class="btn btn-danger btn-sm" onclick="deletarVet(${v.id})" style="padding:5px 8px">
