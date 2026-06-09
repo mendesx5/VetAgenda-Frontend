@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
-import styles from './Login.module.css'; // 🌟 Importando o seu novo arquivo CSS Module
+import { AuthContext } from '../../context/AuthContext';
+import styles from './Login.module.css';
 
 const Login = () => {
     const [loginInput, setLoginInput] = useState('');
