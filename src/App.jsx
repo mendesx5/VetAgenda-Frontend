@@ -1,27 +1,33 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ToastProvider } from './hooks/ToastContext';
-import AppLayout from './components/layout/AppLayout';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Agendamentos from './pages/Agendamentos/Agendamentos';
-import Animais from './pages/Animais/Animais';
-import Tutores from './pages/Tutores/Tutores';
-import Veterinarios from './pages/Veterinarios/Veterinarios';
-import './styles/globals.css';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Veterinarios from './pages/Veterinarios';
 
-export default function App() {
+function App() {
   return (
     <BrowserRouter>
-      <ToastProvider>
+      <AuthProvider>
         <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/"              element={<Dashboard />} />
-            <Route path="/agendamentos"  element={<Agendamentos />} />
-            <Route path="/animais"       element={<Animais />} />
-            <Route path="/tutores"       element={<Tutores />} />
-            <Route path="/veterinarios"  element={<Veterinarios />} />
-          </Route>
+          {/* Rota Pública */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Rotas Protegidas (Qualquer um logado vê) */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+
+          {/* Rota SUPER Protegida (Apenas ADMIN/Patrão vê) */}
+          <Route path="/veterinarios" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <Veterinarios />
+            </ProtectedRoute>
+          } />
         </Routes>
-      </ToastProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
